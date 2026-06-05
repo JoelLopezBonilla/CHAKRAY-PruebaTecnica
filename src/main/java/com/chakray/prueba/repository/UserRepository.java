@@ -34,6 +34,12 @@ public class UserRepository {
                                         .name("workaddress")
                                         .street("street No. 1")
                                         .countryCode("UK")
+                                        .build(),
+                                Address.builder()
+                                        .id(2L)
+                                        .name("homeaddress")
+                                        .street("street No. 2")
+                                        .countryCode("AU")
                                         .build()
                         ))
                         .build()

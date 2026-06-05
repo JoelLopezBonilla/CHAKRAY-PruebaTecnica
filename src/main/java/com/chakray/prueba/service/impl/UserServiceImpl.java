@@ -2,7 +2,9 @@ package com.chakray.prueba.service.impl;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.stereotype.Service;
@@ -59,6 +61,46 @@ public class UserServiceImpl implements UserService{
             users = applyFilter(users, filter);
         }
         return users;
+    }
+
+    @Override
+    public User createUser(User user){
+
+        user.setId(UUID.randomUUID());
+        userRepository.save(user);
+        return user;
+
+    }
+
+    @Override
+    public User updateUser(UUID id, User user){
+        User buscarUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        if (user.getName() != buscarUser.getName()) {
+            buscarUser.setName(user.getName());    
+        }
+        if (user.getEmail() != buscarUser.getEmail()) {
+            buscarUser.setEmail(user.getEmail());    
+        }
+        if (user.getPhone() != buscarUser.getPhone()) {
+            buscarUser.setPhone(user.getPhone());    
+        }
+        if (user.getAddresses() != buscarUser.getAddresses()) {
+            buscarUser.setAddresses(user.getAddresses());
+            
+        }
+        /*if (user.getAddresses().getName() != buscarUser.getAddresses().getName()) {
+            buscarUser.getAddresses().setName(buscarUser.getAddresses().getName());    
+        }*/
+
+
+        return user;
+    }
+
+    @Override
+    public void deleteUser(UUID id){
+        User buscarUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        userRepository.delete(buscarUser);
     }
     
     private List<User> applyFilter(List<User> users, String filter){

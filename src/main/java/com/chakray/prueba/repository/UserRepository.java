@@ -40,10 +40,8 @@ public class UserRepository {
                                         .name("homeaddress")
                                         .street("street No. 2")
                                         .countryCode("AU")
-                                        .build()
-                        ))
-                        .build()
-        );
+                                        .build()))
+                        .build());
 
         users.add(
                 User.builder()
@@ -54,9 +52,20 @@ public class UserRepository {
                         .password("password2")
                         .taxId("AARR990102XXX")
                         .createdAt("01-01-2026 00:00")
-                        .addresses(new ArrayList<>())
-                        .build()
-        );
+                        .addresses(List.of(
+                                Address.builder()
+                                        .id(1L)
+                                        .name("workaddress")
+                                        .street("street No. 1")
+                                        .countryCode("UK")
+                                        .build(),
+                                Address.builder()
+                                        .id(2L)
+                                        .name("homeaddress")
+                                        .street("street No. 2")
+                                        .countryCode("AU")
+                                        .build()))
+                        .build());
 
         users.add(
                 User.builder()
@@ -67,44 +76,57 @@ public class UserRepository {
                         .password("password3")
                         .taxId("AARR990103XXX")
                         .createdAt("01-01-2026 00:00")
-                        .addresses(new ArrayList<>())
-                        .build()
-        );
+                        .addresses(List.of(
+                                Address.builder()
+                                        .id(1L)
+                                        .name("workaddress")
+                                        .street("street No. 1")
+                                        .countryCode("UK")
+                                        .build(),
+                                Address.builder()
+                                        .id(2L)
+                                        .name("homeaddress")
+                                        .street("street No. 2")
+                                        .countryCode("AU")
+                                        .build()))
+                        .build());
     }
 
     public List<User> findAll() {
         return users;
     }
 
-    public List<User> findOrderByEmail(){
+    public List<User> findOrderByEmail() {
         return users.stream()
                 .sorted(Comparator.comparing(User::getEmail))
                 .toList();
     }
-    public List<User> findOrderById(){
+
+    public List<User> findOrderById() {
         return users.stream()
                 .sorted(Comparator.comparing(User::getId))
                 .toList();
     }
-    public List<User> findOrderByName(){
+
+    public List<User> findOrderByName() {
         return users.stream()
                 .sorted(Comparator.comparing(User::getName))
                 .toList();
     }
 
-    public List<User> findOrderByPhone(){
+    public List<User> findOrderByPhone() {
         return users.stream()
                 .sorted(Comparator.comparing(User::getPhone))
                 .toList();
     }
 
-    public List<User> findOrderByTaxId(){
+    public List<User> findOrderByTaxId() {
         return users.stream()
                 .sorted(Comparator.comparing(User::getTaxId))
                 .toList();
     }
-    
-    public List<User> findOrderByCreatedAt(){
+
+    public List<User> findOrderByCreatedAt() {
         return users.stream()
                 .sorted(Comparator.comparing(User::getCreatedAt))
                 .toList();

@@ -113,22 +113,45 @@ public class UserServiceImpl implements UserService {
         User buscarUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         UserDTO userDTO = new UserDTO();
 
+        boolean correctRFC = validateRFC(user.getTaxId());
+        boolean correctPhone = validatePhone(user.getPhone());
+
+        if (!correctPhone && !correctRFC) {
+            throw new ResponseException("RFC y Telefono invalido usuario no creado");
+        } else if (!correctRFC) {
+            throw new ResponseException("RFC invalido usuariod no creado");
+        } else if (!correctPhone) {
+            throw new ResponseException("Telefono invalido usuario no creado");
+        }
+
+        if (!user.getPhone().equals(buscarUser.getPhone())) {
+            buscarUser.setPhone(user.getPhone());
+        }
+
+        if (!user.getTaxId().equals(buscarUser.getTaxId())) {
+
+            userRepository.findByTaxId(user.getTaxId())
+                    .ifPresent(existingUser -> {
+                        throw new ResponseException("RFC ya registrado.");
+                    });
+
+            buscarUser.setTaxId(user.getTaxId());
+        }
+
         String newPassword = encryptionService.encrypt(user.getPassword());
 
-        if (newPassword != buscarUser.getPassword()) {
+        if (!newPassword.equals(buscarUser.getPassword())) {
             buscarUser.setPassword(newPassword);
         }
 
-        if (user.getName() != buscarUser.getName()) {
+        if (!user.getName().equals(buscarUser.getName())) {
             buscarUser.setName(user.getName());
         }
-        if (user.getEmail() != buscarUser.getEmail()) {
+        if (!user.getEmail().equals(buscarUser.getEmail())) {
             buscarUser.setEmail(user.getEmail());
         }
-        if (user.getPhone() != buscarUser.getPhone()) {
-            buscarUser.setPhone(user.getPhone());
-        }
-        if (user.getAddresses() != buscarUser.getAddresses()) {
+
+        if (!user.getAddresses().equals(buscarUser.getAddresses())) {
             buscarUser.setAddresses(user.getAddresses());
         }
 
